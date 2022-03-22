@@ -5,12 +5,7 @@ import { mockImgProduct } from '../utils/mockImages';
 
 // ----------------------------------------------------------------------
 
-const PRODUCT_NAME = [
-  'Nike Air Force 1 NDESTRUKT',
-  'Nike Space Hippie 04',
-  'Nike Air Zoom Pegasus 37 A.I.R. Chaz Bear',
-  'Nike Blazer Low 77 Vintage'
-];
+const PRODUCT_NAME = ['Lomé-Cinkassé', 'Lomé-Kara', 'Cinkassé-Sokodé', 'Cinkassé-Tsévié'];
 const PRODUCT_COLOR = [
   '#00AB55',
   '#000000',
@@ -31,7 +26,7 @@ const products = [...Array(24)].map((_, index) => {
     id: faker.datatype.uuid(),
     cover: mockImgProduct(setIndex),
     name: PRODUCT_NAME[index],
-    price: faker.datatype.number({ min: 4, max: 99, precision: 0.01 }),
+    price: faker.datatype.number({ min: 4, max: 9, precision: 0.01 }),
     priceSale: setIndex % 3 ? null : faker.datatype.number({ min: 19, max: 29, precision: 0.01 }),
     colors:
       (setIndex === 1 && PRODUCT_COLOR.slice(0, 2)) ||
