@@ -40,17 +40,17 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function Login() {
   return (
-    <RootStyle title="Login | Minimal-UI">
+    <RootStyle title="Connexion | Dashboard LK">
       <AuthLayout>
-        Don’t have an account? &nbsp;
+        Vous n'avez pas de compte? &nbsp;
         <Link underline="none" variant="subtitle2" component={RouterLink} to="/register">
-          Get started
+          Commencez
         </Link>
       </AuthLayout>
 
       <SectionStyle sx={{ display: { xs: 'none', md: 'flex' } }}>
         <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-          Hi, Welcome Back
+          Bienvenue cher administrateur
         </Typography>
         <img src="/static/illustrations/illustration_login.png" alt="login" />
       </SectionStyle>
@@ -59,9 +59,9 @@ export default function Login() {
         <ContentStyle>
           <Stack sx={{ mb: 5 }}>
             <Typography variant="h4" gutterBottom>
-              Sign in to Minimal
+              Connectez-vous
             </Typography>
-            <Typography sx={{ color: 'text.secondary' }}>Enter your details below.</Typography>
+            <Typography sx={{ color: 'text.secondary' }}>Entrez vos informations.</Typography>
           </Stack>
           <AuthSocial />
 
@@ -75,9 +75,9 @@ export default function Login() {
               display: { sm: 'none' }
             }}
           >
-            Don’t have an account?&nbsp;
+            Vous n'avez pas de compte?&nbsp;
             <Link variant="subtitle2" component={RouterLink} to="register" underline="hover">
-              Get started
+              Commencez
             </Link>
           </Typography>
         </ContentStyle>

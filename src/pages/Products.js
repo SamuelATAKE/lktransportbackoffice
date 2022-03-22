@@ -1,8 +1,9 @@
 import { useFormik } from 'formik';
 import { useState } from 'react';
 // material
-import { Container, Stack, Typography } from '@mui/material';
+import { Container, Stack, Typography, Button } from '@mui/material';
 // components
+import { Link as RouterLink } from 'react-router-dom';
 import Page from '../components/Page';
 import {
   ProductSort,
@@ -12,7 +13,7 @@ import {
 } from '../sections/@dashboard/products';
 //
 import PRODUCTS from '../_mocks_/products';
-
+import Iconify from '../components/Iconify';
 // ----------------------------------------------------------------------
 
 export default function EcommerceShop() {
@@ -47,7 +48,7 @@ export default function EcommerceShop() {
   };
 
   return (
-    <Page title="Dashboard: Products | Minimal-UI">
+    <Page title="Dashboard: Plans tarifaires | LK">
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
           Plans tarifaires
@@ -60,6 +61,14 @@ export default function EcommerceShop() {
           justifyContent="flex-end"
           sx={{ mb: 5 }}
         >
+          <Button
+            variant="contained"
+            component={RouterLink}
+            to="#"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+          >
+            Ajouter plan tarifaire
+          </Button>
           <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
             <ProductFilterSidebar
               formik={formik}
