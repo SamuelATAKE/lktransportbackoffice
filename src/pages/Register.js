@@ -40,7 +40,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function Register() {
   return (
-    <RootStyle title="Register | Minimal-UI">
+    <RootStyle title="Inscription | Admin LK-Transport">
       <AuthLayout>
         Avez-vous déjà un compte? &nbsp;
         <Link underline="none" variant="subtitle2" component={RouterLink} to="/login">

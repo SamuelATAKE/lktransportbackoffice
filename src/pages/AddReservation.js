@@ -1,23 +1,22 @@
 import React from 'react';
-// material
 import { Container, Typography } from '@mui/material';
-import ProductAdd from '../sections/@dashboard/products/ProductAdd';
+import ReservationAdd from '../sections/@dashboard/user/ReservationAdd';
 
 import Page from '../components/Page';
 
-function AddProduct() {
+function AddReservation() {
   return (
-    <Page title="Dashboard: Ajouter plan tarifaire | LK">
+    <Page title="Dashboard: Ajouter une réservation| LK">
       <Container>
         <br />
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Ajouter un plan tarifaire
+          Ajouter une réservation
         </Typography>
 
-        <ProductAdd />
+        <ReservationAdd />
       </Container>
     </Page>
   );
 }
 
-export default AddProduct;
+export default AddReservation;

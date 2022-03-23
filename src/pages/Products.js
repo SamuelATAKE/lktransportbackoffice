@@ -64,7 +64,7 @@ export default function EcommerceShop() {
           <Button
             variant="contained"
             component={RouterLink}
-            to="#"
+            to="/dashboard/ajouter-tarif"
             startIcon={<Iconify icon="eva:plus-fill" />}
           >
             Ajouter plan tarifaire

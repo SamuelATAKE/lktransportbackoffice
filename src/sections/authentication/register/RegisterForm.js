@@ -5,14 +5,33 @@ import { useNavigate } from 'react-router-dom';
 // material
 import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+
+import { toast } from 'react-toastify';
+
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import app from '../../../config';
 // component
 import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
+const initialState = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  number: '',
+  station: '',
+  password: ''
+};
 
 export default function RegisterForm() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [state, setState] = useState(initialState);
+  const { firstName, lastName, email, number, password, station } = state;
+  const [data, setData] = useState({});
 
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -27,16 +46,41 @@ export default function RegisterForm() {
     password: Yup.string().required('Mot de passe requis')
   });
 
+  const handleChange = (event: SelectChangeEvent) => {
+    console.log(event);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setState({ ...state, [name]: value });
+  };
+
   const formik = useFormik({
     initialValues: {
       firstName: '',
       lastName: '',
       email: '',
+      telephone: '',
+      station: '',
       password: ''
     },
-    validationSchema: RegisterSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: (e) => {
+      e.preventDefault();
+      console.log('Cool');
+      console.log(state);
+
+      app
+        .database()
+        .ref()
+        .child('users')
+        .push(getFieldProps, (err) => {
+          if (err) {
+            toast.error(err);
+          } else {
+            toast.success('Administrateur ajoutée');
+          }
+        });
+      navigate('/', { replace: true });
     }
   });
 
@@ -51,6 +95,8 @@ export default function RegisterForm() {
               fullWidth
               label="Prénom(s)"
               {...getFieldProps('firstName')}
+              value={firstName || ''}
+              onChange={handleInputChange}
               error={Boolean(touched.firstName && errors.firstName)}
               helperText={touched.firstName && errors.firstName}
             />
@@ -59,6 +105,8 @@ export default function RegisterForm() {
               fullWidth
               label="Nom"
               {...getFieldProps('lastName')}
+              value={lastName || ''}
+              onChange={handleInputChange}
               error={Boolean(touched.lastName && errors.lastName)}
               helperText={touched.lastName && errors.lastName}
             />
@@ -70,16 +118,47 @@ export default function RegisterForm() {
             type="email"
             label="Adresse mail"
             {...getFieldProps('email')}
+            value={email || ''}
+            onChange={handleInputChange}
             error={Boolean(touched.email && errors.email)}
             helperText={touched.email && errors.email}
           />
 
           <TextField
             fullWidth
+            type="number"
+            label="Numéro de téléphone"
+            {...getFieldProps('number')}
+            value={number || ''}
+            onChange={handleInputChange}
+            error={Boolean(touched.number && errors.number)}
+            helperText={touched.number && errors.number}
+          />
+
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Station</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              {...getFieldProps('station')}
+              value={station || ''}
+              onChange={handleInputChange}
+              label="Station"
+            >
+              <MenuItem value={10}>Cinkassé</MenuItem>
+              <MenuItem value={20}>Sokodé</MenuItem>
+              <MenuItem value={30}>Kara</MenuItem>
+            </Select>
+          </FormControl>
+
+          <TextField
+            fullWidth
             autoComplete="current-password"
             type={showPassword ? 'text' : 'password'}
-            label="Password"
+            label="Mot de passe"
             {...getFieldProps('password')}
+            value={password || ''}
+            onChange={handleInputChange}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
