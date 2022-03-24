@@ -12,7 +12,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import app from '../../../config';
+import { app } from '../../../config';
 // component
 import Iconify from '../../../components/Iconify';
 
@@ -65,7 +65,6 @@ export default function RegisterForm() {
       password: ''
     },
     onSubmit: (e) => {
-      e.preventDefault();
       console.log('Cool');
       console.log(state);
 
@@ -73,7 +72,7 @@ export default function RegisterForm() {
         .database()
         .ref()
         .child('users')
-        .push(getFieldProps, (err) => {
+        .push(state, (err) => {
           if (err) {
             toast.error(err);
           } else {
@@ -84,11 +83,31 @@ export default function RegisterForm() {
     }
   });
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    console.log('Cool');
+    console.log(state);
+
+    app
+      .database()
+      .ref()
+      .child('/users')
+      .push(state, (err) => {
+        console.log('Arrived');
+        if (err) {
+          toast.error(err);
+        } else {
+          toast.success('Administrateur ajoutée');
+        }
+      });
+    navigate('/', { replace: true });
+  };
+
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
   return (
     <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+      <Form autoComplete="off" noValidate onSubmit={onSubmit}>
         <Stack spacing={3}>
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
