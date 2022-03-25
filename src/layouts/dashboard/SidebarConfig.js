@@ -20,6 +20,11 @@ const sidebarConfig = [
     title: 'Tarifs',
     path: '/dashboard/products',
     icon: getIcon('eva:shopping-bag-fill')
+  },
+  {
+    title: 'Administrateurs',
+    path: '/dashboard/products',
+    icon: getIcon('eva:people-fill')
   }
 ];
 

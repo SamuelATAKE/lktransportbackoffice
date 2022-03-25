@@ -26,4 +26,7 @@ const users = [...Array(24)].map((_, index) => ({
   ])
 }));
 
+console.log(Array(24));
+console.log(users);
+
 export default users;

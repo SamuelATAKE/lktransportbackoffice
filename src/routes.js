@@ -12,6 +12,7 @@ import User from './pages/User';
 import NotFound from './pages/Page404';
 import AddProduct from './pages/AddProduct';
 import AddReservation from './pages/AddReservation';
+import Administrateurs from './pages/Administrateurs';
 
 // ----------------------------------------------------------------------
 
@@ -26,7 +27,9 @@ export default function Router() {
         { path: 'products', element: <Products /> },
         { path: 'blog', element: <Blog /> },
         { path: 'ajouter-tarif', element: <AddProduct /> },
-        { path: 'ajouter-reservation', element: <AddReservation /> }
+        { path: 'ajouter-reservation', element: <AddReservation /> },
+        { path: 'ajouter-admin', element: <Register /> },
+        { path: 'administrateurs', element: <Administrateurs /> }
       ]
     },
     {

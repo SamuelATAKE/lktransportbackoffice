@@ -12,7 +12,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { app } from '../../../config';
+import app from '../../../config';
 // component
 import Iconify from '../../../components/Iconify';
 
@@ -32,6 +32,7 @@ export default function RegisterForm() {
   const [state, setState] = useState(initialState);
   const { firstName, lastName, email, number, password, station } = state;
   const [data, setData] = useState({});
+  const history = useNavigate();
 
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -76,10 +77,10 @@ export default function RegisterForm() {
           if (err) {
             toast.error(err);
           } else {
-            toast.success('Administrateur ajoutée');
+            toast.success('Administrateur ajouté');
           }
         });
-      navigate('/', { replace: true });
+      setTimeout(() => history.push('/'), 500);
     }
   });
 
