@@ -15,12 +15,21 @@ import {
 import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
+import { tab } from '../../../_mocks_/admin';
 
 // ----------------------------------------------------------------------
+
+const initialState = {
+  email: '',
+  password: '',
+  remember: true
+};
 
 export default function LoginForm() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [state, setState] = useState(initialState);
+  const { email, password } = state;
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -28,6 +37,11 @@ export default function LoginForm() {
       .required('Adresse mail requise'),
     password: Yup.string().required('Mot de passe requis')
   });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setState({ ...state, [name]: value });
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -41,6 +55,20 @@ export default function LoginForm() {
     }
   });
 
+  const onSubmit = (e) => {
+    console.log('Cool');
+    console.log(state);
+    tab.forEach((element) => {
+      console.log(element.email);
+      console.log(state);
+      if (element.email === email && element.password === password) {
+        console.log('Vous êtes loggé');
+        sessionStorage.setItem('userConnected', element.email);
+        navigate('/', { replace: true });
+      }
+    });
+  };
+
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   const handleShowPassword = () => {
@@ -49,7 +77,7 @@ export default function LoginForm() {
 
   return (
     <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+      <Form autoComplete="off" noValidate onSubmit={onSubmit}>
         <Stack spacing={3}>
           <TextField
             fullWidth
@@ -57,6 +85,8 @@ export default function LoginForm() {
             type="email"
             label="Adresse mail"
             {...getFieldProps('email')}
+            value={email || ''}
+            onChange={handleInputChange}
             error={Boolean(touched.email && errors.email)}
             helperText={touched.email && errors.email}
           />
@@ -67,6 +97,8 @@ export default function LoginForm() {
             type={showPassword ? 'text' : 'password'}
             label="Mot de passe"
             {...getFieldProps('password')}
+            value={password || ''}
+            onChange={handleInputChange}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">

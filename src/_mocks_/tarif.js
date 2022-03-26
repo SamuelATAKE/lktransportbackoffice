@@ -10,7 +10,7 @@ const tab = [];
 app
   .database()
   .ref()
-  .child('/users')
+  .child('/tarifs')
   .on('value', (snapshot) => {
     if (snapshot.val() !== null) {
       console.log('Snapshots');
@@ -29,12 +29,12 @@ app
 
 console.log(tab);
 
-const admins = [...tab].map((_, index) => ({
+const tarifs = [...tab].map((_, index) => ({
   id: faker.datatype.uuid(),
   avatarUrl: mockImgAvatar(index + 1),
-  firstName: tab[index].firstName,
-  lastName: tab[index].lastName,
-  number: tab[index].number,
+  departure: tab[index].depart,
+  destination: tab[index].lastName,
+  price: tab[index].number,
   email: tab[index].email,
   station: tab[index].station,
   password: tab[index].password
@@ -43,6 +43,6 @@ const admins = [...tab].map((_, index) => ({
 console.log('before export');
 console.log(tab);
 console.log(tab);
-console.log(admins);
+console.log(tarifs);
 export { tab };
-export default admins;
+export default tarifs;

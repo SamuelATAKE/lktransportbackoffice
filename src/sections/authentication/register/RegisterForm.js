@@ -33,6 +33,9 @@ export default function RegisterForm() {
   const { firstName, lastName, email, number, password, station } = state;
   const [data, setData] = useState({});
   const history = useNavigate();
+  const cinkasse = 'Cinkassé';
+  const kara = 'Kara';
+  const lome = 'Lomé';
 
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -89,19 +92,19 @@ export default function RegisterForm() {
     console.log('Cool');
     console.log(state);
 
-    app
-      .database()
-      .ref()
-      .child('/users')
-      .push(state, (err) => {
-        console.log('Arrived');
-        if (err) {
-          toast.error(err);
-        } else {
-          toast.success('Administrateur ajoutée');
-        }
-      });
-    navigate('/', { replace: true });
+    // app
+    //  .database()
+    //  .ref()
+    //  .child('/users')
+    //  .push(state, (err) => {
+    //    console.log('Arrived');
+    //    if (err) {
+    //      toast.error(err);
+    //    } else {
+    //      toast.success('Administrateur ajoutée');
+    //    }
+    //  });
+    // navigate('/', { replace: true });
   };
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
@@ -165,9 +168,9 @@ export default function RegisterForm() {
               onChange={handleInputChange}
               label="Station"
             >
-              <MenuItem value={10}>Cinkassé</MenuItem>
-              <MenuItem value={20}>Sokodé</MenuItem>
-              <MenuItem value={30}>Kara</MenuItem>
+              <MenuItem value={cinkasse}>Cinkassé</MenuItem>
+              <MenuItem value={lome}>Sokodé</MenuItem>
+              <MenuItem value={kara}>Kara</MenuItem>
             </Select>
           </FormControl>
 

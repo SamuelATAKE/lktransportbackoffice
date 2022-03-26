@@ -23,7 +23,7 @@ const sidebarConfig = [
   },
   {
     title: 'Administrateurs',
-    path: '/dashboard/products',
+    path: '/dashboard/administrateurs',
     icon: getIcon('eva:people-fill')
   }
 ];
