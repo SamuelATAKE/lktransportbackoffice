@@ -25,6 +25,11 @@ const sidebarConfig = [
     title: 'Administrateurs',
     path: '/dashboard/administrateurs',
     icon: getIcon('eva:people-fill')
+  },
+  {
+    title: 'Stations',
+    path: '/dashboard/stations',
+    icon: getIcon('eva:people-fill')
   }
 ];
 

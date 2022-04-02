@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import { useFormik } from 'formik';
+import { useState } from 'react';
 import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
-import { Link as RouterLink } from 'react-router-dom';
 // material
 import {
   Card,
   Table,
   Stack,
-  Avatar,
   Button,
   Checkbox,
   TableRow,
@@ -19,22 +17,30 @@ import {
   TablePagination
 } from '@mui/material';
 // components
+import { Link as RouterLink } from 'react-router-dom';
 import Page from '../components/Page';
-import Label from '../components/Label';
+//
+// import { tab } from '../_mocks_/tarif';
 import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
-import AdminService from '../services/AdminService';
+import {
+  StationListHead,
+  StationListToolbar,
+  StationMoreMenu,
+  StationSort,
+  StationFilterSidebar
+} from '../sections/@dashboard/station';
+import StationService from '../services/StationService';
+// ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'prenom', label: 'Prénom', alignRight: false },
   { id: 'nom', label: 'Nom', alignRight: false },
-  { id: 'email', label: 'Adresse mail', alignRight: false },
-  { id: 'telephone', label: 'Numéro de téléhone', alignRight: false },
-  { id: 'station', label: 'Station', alignRight: false },
+  { id: 'ville', label: 'Ville', alignRight: false },
+  { id: 'localisation', label: 'Localisation', alignRight: false },
+  { id: 'contact', label: 'Contact', alignRight: false },
   { id: '' }
 ];
 
@@ -69,7 +75,8 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-function Administrateurs() {
+function Station() {
+  const [openFilter, setOpenFilter] = useState(false);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -77,32 +84,29 @@ function Administrateurs() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const [state, setState] = useState({ stations: [] });
+
+  StationService.getStations().then((response) => {
+    // tab.push(response.data);
+    // console.log('After push');
+    // console.log(JSON.stringify(response.data));
+    response.data.forEach((element) => {
+      // console.log(element.nom);
+      setState({ stations: response.data });
+    });
+    // console.log('L etat');
+    // console.log(state);
+  });
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
-  const [state, setState] = useState({ admins: [] });
-
-  AdminService.getAdmins().then((response) => {
-    // tab.push(response.data);
-    // console.log('After push');
-    // console.log(JSON.stringify(response.data));
-    response.data.forEach((element) => {
-      // console.log(element.nom);
-      setState({ admins: response.data });
-    });
-    console.log('La station');
-    // console.log(state);
-    state.admins.forEach((element) => {
-      console.log(element.station);
-    });
-  });
-
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = state.admins.map((n) => n.name);
+      const newSelecteds = state.stations.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -140,30 +144,65 @@ function Administrateurs() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - state.admins.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - state.stations.length) : 0;
 
-  const filteredUsers = applySortFilter(state.admins, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(state.stations, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
+
+  const formik = useFormik({
+    initialValues: {
+      nom: '',
+      ville: '',
+      localisation: '',
+      contact: ''
+    },
+    onSubmit: () => {
+      setOpenFilter(false);
+    }
+  });
+
+  const { resetForm, handleSubmit } = formik;
+
+  const handleOpenFilter = () => {
+    setOpenFilter(true);
+  };
+
+  const handleCloseFilter = () => {
+    setOpenFilter(false);
+  };
+
+  const handleResetFilter = () => {
+    handleSubmit();
+    resetForm();
+  };
+
   return (
-    <Page title="Administrateurs | Dashboard-LK">
+    <Page title="Dashboard: Stations | LK">
       <Container>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Typography variant="h4" gutterBottom>
-            Administrateurs
-          </Typography>
+        <Typography variant="h4" sx={{ mb: 5 }}>
+          Les stations
+        </Typography>
+
+        <Stack
+          direction="row"
+          flexWrap="wrap-reverse"
+          alignItems="center"
+          justifyContent="flex-end"
+          sx={{ mb: 5 }}
+        >
           <Button
             variant="contained"
             component={RouterLink}
-            to="/dashboard/ajouter-admin"
+            to="/dashboard/ajouter-station"
             startIcon={<Iconify icon="eva:plus-fill" />}
           >
-            Nouveau administrateur
+            Ajouter une station
           </Button>
         </Stack>
 
         <Card>
-          <UserListToolbar
+          <StationListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -172,11 +211,11 @@ function Administrateurs() {
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <UserListHead
+                <StationListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={state.admins.length}
+                  rowCount={state.stations.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -185,8 +224,8 @@ function Administrateurs() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, prenom, nom, email, telephone, avatarUrl, station } = row;
-                      const isItemSelected = selected.indexOf(prenom) !== -1;
+                      const { id, nom, ville, localisation, contact } = row;
+                      const isItemSelected = selected.indexOf(nom) !== -1;
 
                       return (
                         <TableRow
@@ -200,24 +239,22 @@ function Administrateurs() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, prenom)}
+                              onChange={(event) => handleClick(event, nom)}
                             />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={prenom} src={avatarUrl} />
                               <Typography variant="subtitle2" noWrap>
-                                {prenom}
+                                {nom}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{nom}</TableCell>
-                          <TableCell align="left">{email}</TableCell>
-                          <TableCell align="left">{telephone}</TableCell>
-                          <TableCell align="left">Station</TableCell>
+                          <TableCell align="left">{ville}</TableCell>
+                          <TableCell align="left">{localisation}</TableCell>
+                          <TableCell align="left">{contact}</TableCell>
 
                           <TableCell align="right">
-                            <UserMoreMenu />
+                            <StationMoreMenu />
                           </TableCell>
                         </TableRow>
                       );
@@ -244,7 +281,7 @@ function Administrateurs() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={state.admins.length}
+            count={state.stations.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -256,4 +293,4 @@ function Administrateurs() {
   );
 }
 
-export default Administrateurs;
+export default Station;

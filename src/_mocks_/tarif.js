@@ -1,43 +1,53 @@
 import { faker } from '@faker-js/faker';
 // import { sample } from 'lodash';
 // utils
-import { mockImgAvatar } from '../utils/mockImages';
-import app from '../config';
+import TarifService from '../services/TarifService';
 
 // ----------------------------------------------------------------------
+const state = { admins: [] };
 
 const tab = [];
-app
-  .database()
-  .ref()
-  .child('/tarifs')
-  .on('value', (snapshot) => {
-    if (snapshot.val() !== null) {
-      console.log('Snapshots');
-      // console.log(snapshot.val().key);
-      // tab.push(snapshot.val());
-      snapshot.forEach((childSnapshot) => {
-        console.log(childSnapshot.key);
-        console.log(childSnapshot.val());
-        // ...
-        tab.push(childSnapshot.val());
-      });
-    } else {
-      tab.push();
-    }
+const tab2 = [];
+console.log('Start');
+TarifService.getTarif().then((response) => {
+  // tab.push(response.data);
+  console.log('After push');
+  console.log(JSON.stringify(response.data));
+  response.data.forEach((element) => {
+    console.log(element.depart);
+    tab.push({
+      id: element.id,
+      depart: element.depart,
+      destination: element.destination,
+      prix: element.prix
+    });
+    tab2.push(tab);
   });
+});
+console.log('Les tarifs');
 
 console.log(tab);
+// for (const element of tab) {
+//  console.log(element);
+// }
 
+console.log(tab2);
+console.log('Display');
+console.log(tab);
+tab.forEach((element) => {
+  console.log('cool');
+  console.log(element);
+});
+console.log('Boucle');
+Object.keys(tab).forEach((key) => {
+  console.log([key, tab[key]]);
+});
+console.log('Fin Boucle');
 const tarifs = [...tab].map((_, index) => ({
-  id: faker.datatype.uuid(),
-  avatarUrl: mockImgAvatar(index + 1),
-  departure: tab[index].depart,
+  id: tab[index].id,
+  depart: tab[index].depart,
   destination: tab[index].lastName,
-  price: tab[index].number,
-  email: tab[index].email,
-  station: tab[index].station,
-  password: tab[index].password
+  prix: tab[index].number
 }));
 
 console.log('before export');

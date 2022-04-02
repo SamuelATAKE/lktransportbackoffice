@@ -13,6 +13,8 @@ import NotFound from './pages/Page404';
 import AddProduct from './pages/AddProduct';
 import AddReservation from './pages/AddReservation';
 import Administrateurs from './pages/Administrateurs';
+import Station from './pages/Station';
+import AddStation from './pages/AddStation';
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +31,9 @@ export default function Router() {
         { path: 'ajouter-tarif', element: <AddProduct /> },
         { path: 'ajouter-reservation', element: <AddReservation /> },
         { path: 'ajouter-admin', element: <Register /> },
-        { path: 'administrateurs', element: <Administrateurs /> }
+        { path: 'administrateurs', element: <Administrateurs /> },
+        { path: 'ajouter-station', element: <AddStation /> },
+        { path: 'stations', element: <Station /> }
       ]
     },
     {

@@ -12,16 +12,19 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+
+import AdminService from '../../../services/AdminService';
+import StationService from '../../../services/StationService';
 import app from '../../../config';
 // component
 import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 const initialState = {
-  firstName: '',
-  lastName: '',
+  prenom: '',
+  nom: '',
   email: '',
-  number: '',
+  telephone: '',
   station: '',
   password: ''
 };
@@ -30,7 +33,7 @@ export default function RegisterForm() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [state, setState] = useState(initialState);
-  const { firstName, lastName, email, number, password, station } = state;
+  const { prenom, nom, email, telephone, password, station } = state;
   const [data, setData] = useState({});
   const history = useNavigate();
   const cinkasse = 'Cinkassé';
@@ -38,14 +41,11 @@ export default function RegisterForm() {
   const lome = 'Lomé';
 
   const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string()
+    prenom: Yup.string()
       .min(2, 'Trop court!')
       .max(50, 'Trop Long!')
       .required('First name required'),
-    lastName: Yup.string()
-      .min(2, 'Trop court!')
-      .max(50, 'Trop Long!')
-      .required('Le nom est requis'),
+    nom: Yup.string().min(2, 'Trop court!').max(50, 'Trop Long!').required('Le nom est requis'),
     email: Yup.string().email('Votre adresse mail doit être valide').required('Email requis'),
     password: Yup.string().required('Mot de passe requis')
   });
@@ -54,6 +54,20 @@ export default function RegisterForm() {
     console.log(event);
   };
 
+  const [estate, setEstate] = useState({ stations: [] });
+
+  StationService.getStations().then((response) => {
+    // tab.push(response.data);
+    // console.log('After push');
+    // console.log(JSON.stringify(response.data));
+    response.data.forEach((element) => {
+      // console.log(element.nom);
+      setEstate({ stations: response.data });
+    });
+    // console.log('L etat');
+    // console.log(state);
+  });
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setState({ ...state, [name]: value });
@@ -61,50 +75,29 @@ export default function RegisterForm() {
 
   const formik = useFormik({
     initialValues: {
-      firstName: '',
-      lastName: '',
+      prenom: '',
+      nom: '',
       email: '',
       telephone: '',
       station: '',
       password: ''
     },
-    onSubmit: (e) => {
-      console.log('Cool');
-      console.log(state);
-
-      app
-        .database()
-        .ref()
-        .child('users')
-        .push(state, (err) => {
-          if (err) {
-            toast.error(err);
-          } else {
-            toast.success('Administrateur ajouté');
-          }
-        });
-      setTimeout(() => history.push('/'), 500);
-    }
+    onSubmit: (e) => {}
   });
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log('Cool');
+    console.log("Voici l'état");
     console.log(state);
-
-    // app
-    //  .database()
-    //  .ref()
-    //  .child('/users')
-    //  .push(state, (err) => {
-    //    console.log('Arrived');
-    //    if (err) {
-    //      toast.error(err);
-    //    } else {
-    //      toast.success('Administrateur ajoutée');
-    //    }
-    //  });
-    // navigate('/', { replace: true });
+    AdminService.addAdmin(JSON.stringify(state))
+      .then((response) => {
+        console.log('Administrateur ajouté avec succès: ');
+        console.log(response.data);
+        navigate('/login', { replace: true });
+      })
+      .catch((error) => {
+        console.log('Une erreur est survenue', error);
+      });
   };
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
@@ -117,21 +110,21 @@ export default function RegisterForm() {
             <TextField
               fullWidth
               label="Prénom(s)"
-              {...getFieldProps('firstName')}
-              value={firstName || ''}
+              {...getFieldProps('prenom')}
+              value={prenom || ''}
               onChange={handleInputChange}
-              error={Boolean(touched.firstName && errors.firstName)}
-              helperText={touched.firstName && errors.firstName}
+              error={Boolean(touched.prenom && errors.prenom)}
+              helperText={touched.prenom && errors.prenom}
             />
 
             <TextField
               fullWidth
               label="Nom"
-              {...getFieldProps('lastName')}
-              value={lastName || ''}
+              {...getFieldProps('nom')}
+              value={nom || ''}
               onChange={handleInputChange}
-              error={Boolean(touched.lastName && errors.lastName)}
-              helperText={touched.lastName && errors.lastName}
+              error={Boolean(touched.nom && errors.nom)}
+              helperText={touched.nom && errors.nom}
             />
           </Stack>
 
@@ -149,13 +142,13 @@ export default function RegisterForm() {
 
           <TextField
             fullWidth
-            type="number"
+            type="telephone"
             label="Numéro de téléphone"
-            {...getFieldProps('number')}
-            value={number || ''}
+            {...getFieldProps('telephone')}
+            value={telephone || ''}
             onChange={handleInputChange}
-            error={Boolean(touched.number && errors.number)}
-            helperText={touched.number && errors.number}
+            error={Boolean(touched.telephone && errors.telephone)}
+            helperText={touched.telephone && errors.telephone}
           />
 
           <FormControl fullWidth>
@@ -168,9 +161,13 @@ export default function RegisterForm() {
               onChange={handleInputChange}
               label="Station"
             >
-              <MenuItem value={cinkasse}>Cinkassé</MenuItem>
-              <MenuItem value={lome}>Sokodé</MenuItem>
-              <MenuItem value={kara}>Kara</MenuItem>
+              <MenuItem value="">Veuillez sélectionner</MenuItem>
+
+              {estate.stations.map((station) => (
+                <MenuItem value={Object.assign(station)} key={station.id}>
+                  {station.nom} {station.ville}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
 

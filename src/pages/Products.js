@@ -21,19 +21,20 @@ import { Link as RouterLink } from 'react-router-dom';
 import Page from '../components/Page';
 import { ProductSort, ProductFilterSidebar } from '../sections/@dashboard/products';
 //
-import tarifs, { tab } from '../_mocks_/tarif';
+// import { tab } from '../_mocks_/tarif';
 import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
+import TarifService from '../services/TarifService';
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'departure', label: 'Départ', alignRight: false },
+  { id: 'depart', label: 'Départ', alignRight: false },
   { id: 'destination', label: 'Destination', alignRight: false },
-  { id: 'price', label: 'Prix', alignRight: false },
+  { id: 'prix', label: 'Prix', alignRight: false },
   { id: '' }
 ];
 
@@ -77,6 +78,20 @@ export default function EcommerceShop() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const [state, setState] = useState({ admins: [] });
+
+  TarifService.getTarif().then((response) => {
+    // tab.push(response.data);
+    // console.log('After push');
+    // console.log(JSON.stringify(response.data));
+    response.data.forEach((element) => {
+      // console.log(element.depart);
+      setState({ admins: response.data });
+    });
+    // console.log('L etat');
+    // console.log(state);
+  });
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -85,7 +100,7 @@ export default function EcommerceShop() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = tab.map((n) => n.name);
+      const newSelecteds = state.admins.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -123,18 +138,18 @@ export default function EcommerceShop() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tab.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - state.admins.length) : 0;
 
-  const filteredUsers = applySortFilter(tab, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(state.admins, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
   const formik = useFormik({
     initialValues: {
       id: '',
-      departure: '',
+      depart: '',
       destination: '',
-      price: ''
+      prix: ''
     },
     onSubmit: () => {
       setOpenFilter(false);
@@ -194,7 +209,7 @@ export default function EcommerceShop() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={tab.length}
+                  rowCount={state.admins.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -203,8 +218,8 @@ export default function EcommerceShop() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, departure, destination, price } = row;
-                      const isItemSelected = selected.indexOf(departure) !== -1;
+                      const { id, depart, destination, prix } = row;
+                      const isItemSelected = selected.indexOf(depart) !== -1;
 
                       return (
                         <TableRow
@@ -218,18 +233,18 @@ export default function EcommerceShop() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, departure)}
+                              onChange={(event) => handleClick(event, depart)}
                             />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
-                                {departure}
+                                {depart}
                               </Typography>
                             </Stack>
                           </TableCell>
                           <TableCell align="left">{destination}</TableCell>
-                          <TableCell align="left">{price}</TableCell>
+                          <TableCell align="left">{prix}</TableCell>
 
                           <TableCell align="right">
                             <UserMoreMenu />
@@ -259,7 +274,7 @@ export default function EcommerceShop() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={tab.length}
+            count={state.admins.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

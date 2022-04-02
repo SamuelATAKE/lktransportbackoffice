@@ -6,18 +6,19 @@ import { Stack, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-toastify';
 import app from '../../../config';
-import TarifService from '../../../services/TarifService';
+import StationService from '../../../services/StationService';
 
 const initialState = {
-  depart: '',
-  destination: '',
-  prix: ''
+  nom: '',
+  ville: '',
+  localisation: '',
+  contact: ''
 };
 
-function ProductAdd() {
+function StationAdd() {
   const navigate = useNavigate();
   const [state, setState] = useState(initialState);
-  const { depart, destination, prix } = state;
+  const { nom, ville, localisation, contact } = state;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -28,18 +29,17 @@ function ProductAdd() {
     e.preventDefault();
     console.log("Voici l'état");
     console.log(state);
-    TarifService.addTarif(JSON.stringify(state))
+    StationService.addStation(JSON.stringify(state))
       .then((response) => {
-        console.log('Administrateur ajouté avec succès: ');
+        console.log('Station ajoutée avec succès: ');
         console.log(response.data);
         // history.push('/');
-        navigate('/dashboard/products', { replace: true });
+        navigate('/dashboard/stations', { replace: true });
       })
       .catch((error) => {
         console.log('Une erreur est survenue', error);
       });
   };
-
   const formik = useFormik({
     initialValues: {
       depart: '',
@@ -59,27 +59,34 @@ function ProductAdd() {
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
               fullWidth
-              label="Départ"
-              {...getFieldProps('depart')}
-              value={depart || ''}
+              label="Nom de la station"
+              {...getFieldProps('nom')}
+              value={nom || ''}
               onChange={handleInputChange}
             />
 
             <TextField
               fullWidth
-              label="Destination"
-              {...getFieldProps('destination')}
-              value={destination || ''}
+              label="Ville de résidence"
+              {...getFieldProps('ville')}
+              value={ville || ''}
               onChange={handleInputChange}
             />
           </Stack>
 
           <TextField
             fullWidth
-            type="number"
-            label="Prix"
-            {...getFieldProps('prix')}
-            value={prix || ''}
+            label="Localisation(Quartier)"
+            {...getFieldProps('localisation')}
+            value={localisation || ''}
+            onChange={handleInputChange}
+          />
+
+          <TextField
+            fullWidth
+            label="Contact(s)"
+            {...getFieldProps('contact')}
+            value={contact || ''}
             onChange={handleInputChange}
           />
 
@@ -98,4 +105,4 @@ function ProductAdd() {
   );
 }
 
-export default ProductAdd;
+export default StationAdd;
