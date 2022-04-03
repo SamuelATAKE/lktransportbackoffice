@@ -1,23 +1,23 @@
 import httpClient from '../http-common';
 
 class AdminService {
-  getAdmins() {
+  static getAdmins() {
     return httpClient.get('/administrateur');
   }
 
-  getAdminById(id) {
-    return httpClient.get('/administrateur/${id}');
-  }
+  // static getAdminById(id) {
+  //  return httpClient.get('/administrateur/${id}');
+  // }
 
-  addAdmin(admin) {
+  static addAdmin(admin) {
     return httpClient.post('/administrateur', admin);
   }
 
-  updateAdmin(admin) {
+  static updateAdmin(admin) {
     return httpClient.put('/administrateur', admin);
   }
 
-  deleteAdmin(admin) {
+  static deleteAdmin(admin) {
     return httpClient.delete('/administrateur', admin);
   }
 }

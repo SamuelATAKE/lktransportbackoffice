@@ -1,23 +1,23 @@
 import httpClient from '../http-common';
 
 class TarifService {
-  getTarif() {
+  static getTarif() {
     return httpClient.get('/tarif');
   }
 
-  getTarifById(id) {
-    return httpClient.get('/tarif/${id}');
-  }
+  // static getTarifById(id) {
+  //  return httpClient.get('/tarif/${id}');
+  // }
 
-  addTarif(tarif) {
+  static addTarif(tarif) {
     return httpClient.post('/tarif', tarif);
   }
 
-  updateTarif(tarif) {
+  static updateTarif(tarif) {
     return httpClient.put('/tarif', tarif);
   }
 
-  deleteTarif(tarif) {
+  static deleteTarif(tarif) {
     return httpClient.delete('/tarif', tarif);
   }
 }
