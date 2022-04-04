@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { Link as RouterLink } from 'react-router-dom';
+import axios from 'axios';
 // material
 import {
   Card,
@@ -85,19 +86,23 @@ function Administrateurs() {
 
   const [state, setState] = useState({ admins: [] });
 
-  AdminService.getAdmins().then((response) => {
-    // tab.push(response.data);
-    // console.log('After push');
-    // console.log(JSON.stringify(response.data));
-    response.data.forEach((element) => {
-      // console.log(element.nom);
-      setState({ admins: response.data });
-    });
-    console.log('La station');
-    // console.log(state);
-    state.admins.forEach((element) => {
-      console.log(element.station);
-    });
+  // AdminService.getAdmins().then((response) => {
+  // tab.push(response.data);
+  // console.log('After push');
+  // console.log(JSON.stringify(response.data));
+  //  response.data.forEach((element) => {
+  // console.log(element.nom);
+  //    setState({ admins: response.data });
+  //  });
+  //  console.log('La station');
+  // console.log(state);
+  //  state.admins.forEach((element) => {
+  //    console.log(element.station);
+  //  });
+  // });
+
+  axios.get(`https://lktransportbackend.herokuapp.com/administrateur`).then((res) => {
+    setState({ admins: res.data });
   });
 
   const handleSelectAllClick = (event) => {

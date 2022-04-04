@@ -1,6 +1,7 @@
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { filter } from 'lodash';
+import axios from 'axios';
 // material
 import {
   Card,
@@ -80,16 +81,20 @@ export default function EcommerceShop() {
 
   const [state, setState] = useState({ admins: [] });
 
-  TarifService.getTarifs().then((response) => {
-    // tab.push(response.data);
-    // console.log('After push');
-    // console.log(JSON.stringify(response.data));
-    response.data.forEach((element) => {
-      // console.log(element.depart);
-      setState({ admins: response.data });
-    });
-    // console.log('L etat');
-    // console.log(state);
+  // TarifService.getTarifs().then((response) => {
+  // tab.push(response.data);
+  // console.log('After push');
+  // console.log(JSON.stringify(response.data));
+  //  response.data.forEach((element) => {
+  // console.log(element.depart);
+  //    setState({ admins: response.data });
+  //  });
+  // console.log('L etat');
+  // console.log(state);
+  // });
+
+  axios.get(`https://lktransportbackend.herokuapp.com/tarif`).then((res) => {
+    setState({ admins: res.data });
   });
 
   const handleRequestSort = (event, property) => {

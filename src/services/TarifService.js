@@ -1,7 +1,7 @@
 import httpClient from '../http-common';
 
 class TarifService {
-  getTarifs = () => {
+  static getTarifs() {
     return httpClient.get('/tarif');
   }
 
@@ -9,15 +9,15 @@ class TarifService {
   //  return httpClient.get('/tarif/${id}');
   // }
 
-  addTarif = (tarif) => {
+  static addTarif(tarif) {
     return httpClient.post('/tarif', tarif);
   }
 
-  updateTarif = (tarif) => {
+  static updateTarif(tarif) {
     return httpClient.put('/tarif', tarif);
   }
 
-  deleteTarif = (tarif) => {
+  static deleteTarif(tarif) {
     return httpClient.delete('/tarif', tarif);
   }
 }

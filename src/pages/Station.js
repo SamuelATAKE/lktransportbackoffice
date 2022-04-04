@@ -1,6 +1,7 @@
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { filter } from 'lodash';
+import axios from 'axios';
 // material
 import {
   Card,
@@ -19,6 +20,7 @@ import {
 // components
 import { Link as RouterLink } from 'react-router-dom';
 import Page from '../components/Page';
+
 //
 // import { tab } from '../_mocks_/tarif';
 import Scrollbar from '../components/Scrollbar';
@@ -86,16 +88,20 @@ function Station() {
 
   const [state, setState] = useState({ stations: [] });
 
-  StationService.getStations().then((response) => {
-    // tab.push(response.data);
-    // console.log('After push');
-    // console.log(JSON.stringify(response.data));
-    response.data.forEach((element) => {
-      // console.log(element.nom);
-      setState({ stations: response.data });
-    });
-    // console.log('L etat');
-    // console.log(state);
+  // StationService.getStations().then((response) => {
+  // tab.push(response.data);
+  // console.log('After push');
+  // console.log(JSON.stringify(response.data));
+  //   response.data.forEach((element) => {
+  // console.log(element.nom);
+  //    setState({ stations: response.data });
+  //  });
+  // console.log('L etat');
+  // console.log(state);
+  // });
+
+  axios.get(`https://lktransportbackend.herokuapp.com/station`).then((res) => {
+    setState({ stations: res.data });
   });
 
   const handleRequestSort = (event, property) => {
