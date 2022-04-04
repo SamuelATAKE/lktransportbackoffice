@@ -1,23 +1,23 @@
 import httpClient from '../http-common';
 
 class StationService {
-  static getStations() {
+  getStations = () => {
     return httpClient.get('/station');
   }
 
-  // static getStationById(id) {
+  // getStationById(id) {
   //  return httpClient.get('/station/${id}');
   // }
 
-  static addStation(station) {
+  addStation = (station) => {
     return httpClient.post('/station', station);
   }
 
-  static updateStation(station) {
+  updateStation = (station) => {
     return httpClient.put('/station', station);
   }
 
-  static deleteStation(station) {
+  deleteStation = (station) => {
     return httpClient.delete('/station', station);
   }
 }

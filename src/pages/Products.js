@@ -80,7 +80,7 @@ export default function EcommerceShop() {
 
   const [state, setState] = useState({ admins: [] });
 
-  TarifService.getTarif().then((response) => {
+  TarifService.getTarifs().then((response) => {
     // tab.push(response.data);
     // console.log('After push');
     // console.log(JSON.stringify(response.data));
