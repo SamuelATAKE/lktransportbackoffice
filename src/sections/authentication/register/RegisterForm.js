@@ -2,6 +2,7 @@ import * as Yup from 'yup';
 import { useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 // material
 import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -89,14 +90,22 @@ export default function RegisterForm() {
     e.preventDefault();
     console.log("Voici l'état");
     console.log(state);
-    AdminService.addAdmin(JSON.stringify(state))
-      .then((response) => {
-        console.log('Administrateur ajouté avec succès: ');
-        console.log(response.data);
+    // AdminService.addAdmin(JSON.stringify(state))
+    //  .then((response) => {
+    //    console.log('Administrateur ajouté avec succès: ');
+    //    console.log(response.data);
+    //    navigate('/login', { replace: true });
+    //  })
+    //  .catch((error) => {
+    //    console.log('Une erreur est survenue', error);
+    //  });
+
+    axios
+      .post(`https://lktransportbackend.herokuapp.com/administrateur`, JSON.stringify(state))
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
         navigate('/login', { replace: true });
-      })
-      .catch((error) => {
-        console.log('Une erreur est survenue', error);
       });
   };
 

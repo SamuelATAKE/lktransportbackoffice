@@ -2,6 +2,7 @@ import * as Yup from 'yup';
 import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
+import axios from 'axios';
 // material
 import {
   Link,
@@ -58,25 +59,36 @@ export default function LoginForm() {
   });
 
   const onSubmit = (e) => {
+    axios.get(`https://lktransportbackend.herokuapp.com/administrateur`).then((res) => {
+      setEstate({ admins: res.data });
+    });
+
     console.log('L etat');
     console.log(state);
-    AdminService.getAdmins().then((response) => {
-      // tab.push(response.data);
-      // console.log('After push');
-      // console.log(JSON.stringify(response.data));
-      response.data.forEach((element) => {
-        // console.log(element.nom);
-        // console.log('setted datas');
-        setEstate({ admins: response.data });
-      });
-      // console.log('L etat');
-      // console.log(state);
-    });
-    console.log('Parcours');
+    // AdminService.getAdmins().then((response) => {
+    // tab.push(response.data);
+    // console.log('After push');
+    // console.log(JSON.stringify(response.data));
+    //  response.data.forEach((element) => {
+    // console.log(element.nom);
+    // console.log('setted datas');
+    //    setEstate({ admins: response.data });
+    //  });
+    // console.log('L etat');
+    // console.log(state);
+    // });
+    // console.log('Parcours');
+    // estate.admins.forEach((element) => {
+    //  console.log(element);
+    //  if (state.email === element.email && state.password === element.password) {
+    //    navigate('/', { replace: true });
+    //  }
+    // });
+
     estate.admins.forEach((element) => {
-      console.log(element);
       if (state.email === element.email && state.password === element.password) {
         navigate('/', { replace: true });
+        sessionStorage.setItem('userConnected', element);
       }
     });
   };

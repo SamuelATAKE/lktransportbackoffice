@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 // material
 import { Stack, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -28,15 +29,23 @@ function ProductAdd() {
     e.preventDefault();
     console.log("Voici l'état");
     console.log(state);
-    TarifService.addTarif(JSON.stringify(state))
-      .then((response) => {
-        console.log('Administrateur ajouté avec succès: ');
-        console.log(response.data);
-        // history.push('/');
+    // TarifService.addTarif(JSON.stringify(state))
+    //  .then((response) => {
+    //    console.log('Administrateur ajouté avec succès: ');
+    //    console.log(response.data);
+    // history.push('/');
+    //    navigate('/dashboard/products', { replace: true });
+    //  })
+    //  .catch((error) => {
+    //    console.log('Une erreur est survenue', error);
+    //  });
+
+    axios
+      .post(`https://lktransportbackend.herokuapp.com/tarif`, JSON.stringify(state))
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
         navigate('/dashboard/products', { replace: true });
-      })
-      .catch((error) => {
-        console.log('Une erreur est survenue', error);
       });
   };
 

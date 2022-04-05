@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 // material
 import { Stack, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -29,15 +30,23 @@ function StationAdd() {
     e.preventDefault();
     console.log("Voici l'état");
     console.log(state);
-    StationService.addStation(JSON.stringify(state))
-      .then((response) => {
-        console.log('Station ajoutée avec succès: ');
-        console.log(response.data);
-        // history.push('/');
+    // StationService.addStation(JSON.stringify(state))
+    //  .then((response) => {
+    //    console.log('Station ajoutée avec succès: ');
+    //    console.log(response.data);
+    //    // history.push('/');
+    //    navigate('/dashboard/stations', { replace: true });
+    //  })
+    //  .catch((error) => {
+    //    console.log('Une erreur est survenue', error);
+    //  });
+
+    axios
+      .post(`https://lktransportbackend.herokuapp.com/station`, JSON.stringify(state))
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
         navigate('/dashboard/stations', { replace: true });
-      })
-      .catch((error) => {
-        console.log('Une erreur est survenue', error);
       });
   };
   const formik = useFormik({
