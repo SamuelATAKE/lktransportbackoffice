@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { filter } from 'lodash';
 import axios from 'axios';
 // material
@@ -93,9 +93,12 @@ export default function EcommerceShop() {
   // console.log(state);
   // });
 
-  axios.get(`https://lktransportbackend.herokuapp.com/tarif`).then((res) => {
-    setState({ admins: res.data });
-  });
+  useEffect(() => {
+    // axios.get(`https://lktransportbackend.herokuapp.com/tarif`).then((res) => {
+    axios.get(`http://localhost:8080/tarif`).then((res) => {
+      setState({ admins: res.data });
+    });
+  }, []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

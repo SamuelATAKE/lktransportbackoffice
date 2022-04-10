@@ -27,13 +27,12 @@ import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import {
-  StationListHead,
-  StationListToolbar,
-  StationMoreMenu,
-  StationSort,
-  StationFilterSidebar
-} from '../sections/@dashboard/station';
-import StationService from '../services/StationService';
+  VoyageListHead,
+  VoyageListToolbar,
+  VoyageMoreMenu,
+  VoyageSort,
+  VoyageFilterSidebar
+} from '../sections/@dashboard/voyage';
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -77,7 +76,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-function Station() {
+function Voyage() {
   const [openFilter, setOpenFilter] = useState(false);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -86,24 +85,24 @@ function Station() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [state, setState] = useState({ stations: [] });
+  const [state, setState] = useState({ voyages: [] });
 
-  // StationService.getStations().then((response) => {
+  // VoyageService.getVoyages().then((response) => {
   // tab.push(response.data);
   // console.log('After push');
   // console.log(JSON.stringify(response.data));
   //   response.data.forEach((element) => {
   // console.log(element.nom);
-  //    setState({ stations: response.data });
+  //    setState({ voyages: response.data });
   //  });
   // console.log('L etat');
   // console.log(state);
   // });
 
   useEffect(() => {
-    // axios.get(`https://lktransportbackend.herokuapp.com/station`).then((res) => {
-    axios.get(`http://localhost:8080/station`).then((res) => {
-      setState({ stations: res.data });
+    // axios.get(`https://lktransportbackend.herokuapp.com/voyage`).then((res) => {
+    axios.get(`http://localhost:8080/voyage`).then((res) => {
+      setState({ voyages: res.data });
     });
   }, []);
 
@@ -115,7 +114,7 @@ function Station() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = state.stations.map((n) => n.name);
+      const newSelecteds = state.voyages.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -153,9 +152,9 @@ function Station() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - state.stations.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - state.voyages.length) : 0;
 
-  const filteredUsers = applySortFilter(state.stations, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(state.voyages, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
@@ -187,10 +186,10 @@ function Station() {
   };
 
   return (
-    <Page title="Dashboard: Stations | LK">
+    <Page title="Dashboard: Voyages | LK">
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Les stations
+          Programmation de voyages
         </Typography>
 
         <Stack
@@ -203,15 +202,15 @@ function Station() {
           <Button
             variant="contained"
             component={RouterLink}
-            to="/dashboard/ajouter-station"
+            to="/dashboard/ajouter-voyage"
             startIcon={<Iconify icon="eva:plus-fill" />}
           >
-            Ajouter une station
+            Programmer un voyage
           </Button>
         </Stack>
 
         <Card>
-          <StationListToolbar
+          <VoyageListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -220,11 +219,11 @@ function Station() {
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <StationListHead
+                <VoyageListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={state.stations.length}
+                  rowCount={state.voyages.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -263,7 +262,7 @@ function Station() {
                           <TableCell align="left">{contact}</TableCell>
 
                           <TableCell align="right">
-                            <StationMoreMenu />
+                            <VoyageMoreMenu />
                           </TableCell>
                         </TableRow>
                       );
@@ -290,7 +289,7 @@ function Station() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={state.stations.length}
+            count={state.voyages.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -302,4 +301,4 @@ function Station() {
   );
 }
 
-export default Station;
+export default Voyage;

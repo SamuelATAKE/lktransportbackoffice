@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { Link as RouterLink } from 'react-router-dom';
@@ -101,9 +101,12 @@ function Administrateurs() {
   //  });
   // });
 
-  axios.get(`https://lktransportbackend.herokuapp.com/administrateur`).then((res) => {
-    setState({ admins: res.data });
-  });
+  useEffect(() => {
+    axios.get(`https://lktransportbackend.herokuapp.com/administrateur`).then((res) => {
+      // axios.get(`http://localhost:8080/administrateur`).then((res) => {
+      setState({ admins: res.data });
+    });
+  }, []);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {

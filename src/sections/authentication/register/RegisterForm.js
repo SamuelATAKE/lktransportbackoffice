@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -57,17 +57,24 @@ export default function RegisterForm() {
 
   const [estate, setEstate] = useState({ stations: [] });
 
-  StationService.getStations().then((response) => {
-    // tab.push(response.data);
-    // console.log('After push');
-    // console.log(JSON.stringify(response.data));
-    response.data.forEach((element) => {
-      // console.log(element.nom);
-      setEstate({ stations: response.data });
+  // StationService.getStations().then((response) => {
+  // tab.push(response.data);
+  // console.log('After push');
+  // console.log(JSON.stringify(response.data));
+  //  response.data.forEach((element) => {
+  // console.log(element.nom);
+  //    setEstate({ stations: response.data });
+  //  });
+  // console.log('L etat');
+  // console.log(state);
+  // });
+
+  useEffect(() => {
+    // axios.get(`https://lktransportbackend.herokuapp.com/station`).then((res) => {
+    axios.get(`http://localhost:8080/station`).then((res) => {
+      setEstate({ stations: res.data });
     });
-    // console.log('L etat');
-    // console.log(state);
-  });
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -101,7 +108,8 @@ export default function RegisterForm() {
     //  });
 
     axios
-      .post(`https://lktransportbackend.herokuapp.com/administrateur`, JSON.stringify(state))
+      // .post(`https://lktransportbackend.herokuapp.com/administrateur`, JSON.stringify(state))
+      .post(`http://localhost:8080/administrateur`, JSON.stringify(state))
       .then((res) => {
         console.log(res);
         console.log(res.data);

@@ -15,6 +15,8 @@ import AddReservation from './pages/AddReservation';
 import Administrateurs from './pages/Administrateurs';
 import Station from './pages/Station';
 import AddStation from './pages/AddStation';
+import AddVoyage from './pages/AddVoyage';
+import Voyage from './pages/Voyage';
 
 // ----------------------------------------------------------------------
 
@@ -33,7 +35,9 @@ export default function Router() {
         { path: 'ajouter-admin', element: <Register /> },
         { path: 'administrateurs', element: <Administrateurs /> },
         { path: 'ajouter-station', element: <AddStation /> },
-        { path: 'stations', element: <Station /> }
+        { path: 'stations', element: <Station /> },
+        { path: 'ajouter-voyage', element: <AddVoyage /> },
+        { path: 'voyages', element: <Voyage /> }
       ]
     },
     {

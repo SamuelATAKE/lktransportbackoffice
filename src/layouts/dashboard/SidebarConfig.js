@@ -29,7 +29,12 @@ const sidebarConfig = [
   {
     title: 'Stations',
     path: '/dashboard/stations',
-    icon: getIcon('eva:people-fill')
+    icon: getIcon('eva:navigation-fill')
+  },
+  {
+    title: 'Voyages',
+    path: '/dashboard/voyages',
+    icon: getIcon('eva:car-fill')
   }
 ];
 

@@ -3,23 +3,22 @@ import { useFormik, Form, FormikProvider } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 // material
-import { Stack, TextField } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select, Stack, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-toastify';
 import app from '../../../config';
-import StationService from '../../../services/StationService';
 
 const initialState = {
-  nom: '',
-  ville: '',
-  localisation: '',
-  contact: ''
+  tarif: '',
+  date: '',
+  places: '',
+  disponibilite: ''
 };
 
-function StationAdd() {
+function VoyageAdd() {
   const navigate = useNavigate();
   const [state, setState] = useState(initialState);
-  const { nom, ville, localisation, contact } = state;
+  const { tarif, date, places, disponibilite } = state;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -30,34 +29,35 @@ function StationAdd() {
     e.preventDefault();
     console.log("Voici l'état");
     console.log(state);
-    // StationService.addStation(JSON.stringify(state))
+    // VoyageService.addVoyage(JSON.stringify(state))
     //  .then((response) => {
-    //    console.log('Station ajoutée avec succès: ');
+    //    console.log('Voyage ajoutée avec succès: ');
     //    console.log(response.data);
     //    // history.push('/');
-    //    navigate('/dashboard/stations', { replace: true });
+    //    navigate('/dashboard/Voyages', { replace: true });
     //  })
     //  .catch((error) => {
     //    console.log('Une erreur est survenue', error);
     //  });
 
     axios
-      // .post(`https://lktransportbackend.herokuapp.com/station`, JSON.stringify(state))
-      .post(`http://localhost:8080/station`, JSON.stringify(state))
+      // .post(`https://lktransportbackend.herokuapp.com/voyage`, JSON.stringify(state))
+      .post(`http://localhost:8080/voyage`, JSON.stringify(state))
       .then((res) => {
         console.log(res);
         console.log(res.data);
-        navigate('/dashboard/stations', { replace: true });
+        navigate('/dashboard/Voyages', { replace: true });
       });
   };
   const formik = useFormik({
     initialValues: {
-      depart: '',
-      destination: '',
-      prix: ''
+      tarif: '',
+      date: '',
+      places: '',
+      disponibilite: ''
     },
     onSubmit: () => {
-      navigate('/dashboard/products', { replace: true });
+      navigate('/dashboard/voyages', { replace: true });
     }
   });
 
@@ -66,37 +66,35 @@ function StationAdd() {
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={onSubmit}>
         <Stack spacing={3}>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-            <TextField
-              fullWidth
-              label="Nom de la station"
-              {...getFieldProps('nom')}
-              value={nom || ''}
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Tarif</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              {...getFieldProps('tarif')}
+              value={tarif || ''}
               onChange={handleInputChange}
-            />
-
-            <TextField
-              fullWidth
-              label="Ville de résidence"
-              {...getFieldProps('ville')}
-              value={ville || ''}
-              onChange={handleInputChange}
-            />
-          </Stack>
+              label="Tarif"
+            >
+              <MenuItem value="">Veuillez sélectionner</MenuItem>
+            </Select>
+          </FormControl>
 
           <TextField
             fullWidth
-            label="Localisation(Quartier)"
-            {...getFieldProps('localisation')}
-            value={localisation || ''}
+            type="datetime-local"
+            label="Date"
+            {...getFieldProps('date')}
+            value={date || ''}
             onChange={handleInputChange}
           />
 
           <TextField
             fullWidth
-            label="Contact(s)"
-            {...getFieldProps('contact')}
-            value={contact || ''}
+            type="number"
+            label="Nombre de places"
+            {...getFieldProps('places')}
+            value={places || ''}
             onChange={handleInputChange}
           />
 
@@ -115,4 +113,4 @@ function StationAdd() {
   );
 }
 
-export default StationAdd;
+export default VoyageAdd;
