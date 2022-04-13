@@ -5,9 +5,6 @@ import axios from 'axios';
 // material
 import { Stack, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { toast } from 'react-toastify';
-import app from '../../../config';
-import StationService from '../../../services/StationService';
 
 const initialState = {
   nom: '',
@@ -43,8 +40,13 @@ function StationAdd() {
 
     axios
       // .post(`https://lktransportbackend.herokuapp.com/station`, JSON.stringify(state))
-      .post(`http://localhost:8080/station`, JSON.stringify(state))
+      .post(`http://localhost:8080/station`, JSON.stringify(state), {
+        headers: {
+          'content-type': 'application/json'
+        }
+      })
       .then((res) => {
+        console.log('Posted');
         console.log(res);
         console.log(res.data);
         navigate('/dashboard/stations', { replace: true });

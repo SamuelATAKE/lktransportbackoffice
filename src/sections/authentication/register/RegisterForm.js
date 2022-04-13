@@ -109,7 +109,11 @@ export default function RegisterForm() {
 
     axios
       // .post(`https://lktransportbackend.herokuapp.com/administrateur`, JSON.stringify(state))
-      .post(`http://localhost:8080/administrateur`, JSON.stringify(state))
+      .post(`http://localhost:8080/administrateur/`, state, {
+        headers: {
+          'content-type': 'application/json'
+        }
+      })
       .then((res) => {
         console.log(res);
         console.log(res.data);
@@ -121,7 +125,7 @@ export default function RegisterForm() {
 
   return (
     <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={onSubmit}>
+      <Form autoComplete="off" noValidate onSubmit={onSubmit} method="POST">
         <Stack spacing={3}>
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField

@@ -42,7 +42,11 @@ function VoyageAdd() {
 
     axios
       // .post(`https://lktransportbackend.herokuapp.com/voyage`, JSON.stringify(state))
-      .post(`http://localhost:8080/voyage`, JSON.stringify(state))
+      .post(`http://localhost:8080/voyage`, JSON.stringify(state), {
+        headers: {
+          'content-type': 'application/json'
+        }
+      })
       .then((res) => {
         console.log(res);
         console.log(res.data);

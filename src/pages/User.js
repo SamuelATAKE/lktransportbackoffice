@@ -83,8 +83,10 @@ export default function User() {
   const [reservation, setReservation] = useState({ voyages: [] });
 
   useEffect(() => {
-    axios.get(`http;//localhost:8080/reservation`).then((res) => {
+    axios.get(`http://localhost:8080/reservation`).then((res) => {
       setReservation({ voyages: res.data });
+      console.log('Les réservations');
+      console.log(res.data);
     });
   }, []);
 
@@ -96,18 +98,18 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = reservation.map((n) => n.nom);
+      const newSelecteds = reservation.voyages.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, nom) => {
-    const selectedIndex = selected.indexOf(nom);
+  const handleClick = (event, name) => {
+    const selectedIndex = selected.indexOf(name);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, nom);
+      newSelected = newSelected.concat(selected, name);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -134,9 +136,14 @@ export default function User() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - reservation.length) : 0;
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - reservation.voyages.length) : 0;
 
-  const filteredUsers = applySortFilter(reservation, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(
+    reservation.voyages,
+    getComparator(order, orderBy),
+    filterName
+  );
 
   const isUserNotFound = filteredUsers.length === 0;
 
@@ -171,7 +178,7 @@ export default function User() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={reservation.length}
+                  rowCount={reservation.voyages.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -180,17 +187,7 @@ export default function User() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const {
-                        id,
-                        nom,
-                        station,
-                        telephone,
-                        dateVoyage,
-                        depart,
-                        destination,
-                        prix,
-                        bagages
-                      } = row;
+                      const { id, nom, station, telephone, dateVoyage, tarif, bagages } = row;
                       const isItemSelected = selected.indexOf(nom) !== -1;
 
                       return (
@@ -215,20 +212,13 @@ export default function User() {
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{station}</TableCell>
+                          <TableCell align="left">{nom}</TableCell>
                           <TableCell align="left">{telephone}</TableCell>
                           <TableCell align="left">{dateVoyage}</TableCell>
-                          <TableCell align="left">{depart}</TableCell>
-                          <TableCell align="left">{destination}</TableCell>
-                          <TableCell align="left">{prix}</TableCell>
-                          <TableCell align="left">
-                            <Label
-                              variant="ghost"
-                              color={(bagages === 'Non' && 'OuiJ' && 'OuiC') || 'success'}
-                            >
-                              {sentenceCase(bagages)}
-                            </Label>
-                          </TableCell>
+                          <TableCell align="left">{tarif.depart}</TableCell>
+                          <TableCell align="left">{tarif.destination}</TableCell>
+                          <TableCell align="left">{tarif.prix}</TableCell>
+                          <TableCell align="left">{bagages}</TableCell>
 
                           <TableCell align="right">
                             <UserMoreMenu />
@@ -258,7 +248,7 @@ export default function User() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={reservation.length}
+            count={reservation.voyages.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
