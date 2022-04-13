@@ -33,7 +33,6 @@ import {
   StationSort,
   StationFilterSidebar
 } from '../sections/@dashboard/station';
-import StationService from '../services/StationService';
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -101,8 +100,8 @@ function Station() {
   // });
 
   useEffect(() => {
-    // axios.get(`https://lktransportbackend.herokuapp.com/station`).then((res) => {
-    axios.get(`http://localhost:8080/station`).then((res) => {
+    axios.get(`https://lktransportbackend.herokuapp.com/station`).then((res) => {
+      // axios.get(`http://localhost:8080/station`).then((res) => {
       setState({ stations: res.data });
     });
   }, []);

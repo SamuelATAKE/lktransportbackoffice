@@ -94,8 +94,8 @@ export default function EcommerceShop() {
   // });
 
   useEffect(() => {
-    // axios.get(`https://lktransportbackend.herokuapp.com/tarif`).then((res) => {
-    axios.get(`http://localhost:8080/tarif`).then((res) => {
+    axios.get(`https://lktransportbackend.herokuapp.com/tarif`).then((res) => {
+      // axios.get(`http://localhost:8080/tarif`).then((res) => {
       setState({ admins: res.data });
     });
   }, []);

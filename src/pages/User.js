@@ -83,7 +83,8 @@ export default function User() {
   const [reservation, setReservation] = useState({ voyages: [] });
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/reservation`).then((res) => {
+    axios.get(`https://lktransportbackend.herokuapp.com/reservation`).then((res) => {
+      // axios.get(`http://localhost:8080/reservation`).then((res) => {
       setReservation({ voyages: res.data });
       console.log('Les réservations');
       console.log(res.data);

@@ -71,7 +71,7 @@ export default function RegisterForm() {
 
   useEffect(() => {
     // axios.get(`https://lktransportbackend.herokuapp.com/station`).then((res) => {
-    axios.get(`http://localhost:8080/station`).then((res) => {
+    axios.get(`https://lktransportbackend.herokuapp.com/station`).then((res) => {
       setEstate({ stations: res.data });
     });
   }, []);
@@ -109,7 +109,7 @@ export default function RegisterForm() {
 
     axios
       // .post(`https://lktransportbackend.herokuapp.com/administrateur`, JSON.stringify(state))
-      .post(`http://localhost:8080/administrateur/`, state, {
+      .post(`https://lktransportbackend.herokuapp.com/administrateur/`, state, {
         headers: {
           'content-type': 'application/json'
         }

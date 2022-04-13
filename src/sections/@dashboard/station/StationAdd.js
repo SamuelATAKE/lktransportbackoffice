@@ -40,7 +40,7 @@ function StationAdd() {
 
     axios
       // .post(`https://lktransportbackend.herokuapp.com/station`, JSON.stringify(state))
-      .post(`http://localhost:8080/station`, JSON.stringify(state), {
+      .post(`https://lktransportbackend.herokuapp.com/station`, JSON.stringify(state), {
         headers: {
           'content-type': 'application/json'
         }
